@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ЛР №4 — Функціональне застосування JS у HTML-документі (Андронов Д. Ю., ІС-43)</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="js/lesson-4.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="container">
+      <h1>Лабораторна робота №4: Функціональне застосування JavaScript у HTML-документі</h1>
+      <p class="page-subtitle">Шаблонні рядки, розгалуження, масиви, методи масивів, функції, сортування вставкою та валідація форми</p>
+      <span class="student-meta">Виконавець: Андронов Данило Юрійович · Група ІС-43 · №1 у списку (Варіант 1 / непарні номери)</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section aria-label="Демонстрація завдань 1–8" class="grid-layout">
+      <article class="task-card">
+        <div>
+          <h2>Завдання №1 (prompt / alert / Console)</h2>
+          <p>Перевірка знака введеного числа (від’ємне, додатнє, нуль) із перевірками на скасування та некоректне введення.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-task-1">Запустити Завдання 1</button>
+      </article>
+
+      <article class="task-card">
+        <div>
+          <h2>Завдання №2 (switch-case)</h2>
+          <p>Визначення пори року за номером <code>'1'</code>–<code>'4'</code> через конструкцію <code>switch-case</code> із гілкою <code>default</code>.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-task-2">Запустити Завдання 2</button>
+      </article>
+
+      <article class="task-card">
+        <div>
+          <h2>Завдання №3 (Ідентифікація)</h2>
+          <p>Запит логіна та пароля для облікових записів <code>Admin</code> і <code>User</code> із виводом результату в Console та <code>alert()</code>.</p>
+          <div class="hint-box">Демо-дані: <strong>Admin / admin123</strong> або <strong>User / user123</strong></div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-task-3">Запустити Завдання 3</button>
+      </article>
+
+      <article class="task-card">
+        <div>
+          <h2>Завдання №4–№6 (Функції та масиви)</h2>
+          <p><code>makeTransaction()</code>, <code>checkForSpam()</code> та <code>filterArray()</code> автоматично виводяться у Console при завантаженні сторінки.</p>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-task-4-6">Повторити приклади 4–6 у Console</button>
+      </article>
+
+      <article class="task-card">
+        <div>
+          <h2>Завдання №7 (Варіант 1 — Масив і Insertion Sort)</h2>
+          <p>Обмін максимального парного елемента та мінімального елемента на парному індексі, сортування методом вставки за зростанням.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-task-7">Запустити Завдання 7</button>
+      </article>
+
+      <article class="task-card">
+        <div>
+          <h2>Завдання №8 (2D-масив)</h2>
+          <p>Генерація матриці 4×4 із ненульових чисел, поділ на додатні/від’ємні, заміна 3-го додатного елемента через <code>prompt()</code>.</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-task-8">Запустити Завдання 8</button>
+      </article>
+    </section>
+
+    <section class="output-panel" aria-label="Журнал виведення у Console">
+      <div class="output-panel-header">
+        <h2>Журнал результатів (дублюється у DevTools Console)</h2>
+        <button type="button" class="btn btn-secondary" id="btn-clear-log">Очистити журнал</button>
+      </div>
+      <pre class="console-mirror" id="console-mirror" aria-live="polite"></pre>
+    </section>
+
+    <section class="form-section" id="task-9-section">
+      <h2>Завдання №9 (Варіант 1): Валідація HTML-форми реєстрації користувача</h2>
+      <p class="form-description">
+        Перевіряються: обов’язкові поля (<span class="required-mark">*</span>), ціле число, дійсне число,
+        дата у форматі <code>DD.MM.YYYY</code> (з календарною перевіркою) та збіг паролів.
+      </p>
+
+      <form id="registration-form" class="reg-form" novalidate>
+        <div class="form-group">
+          <label for="reg-username">Логін користувача <span class="required-mark">*</span></label>
+          <input type="text" id="reg-username" name="username" placeholder="Наприклад: danilo_ic43" autocomplete="username">
+          <span class="field-error" id="err-username" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-age">Вік (ціле число) <span class="required-mark">*</span></label>
+          <input type="text" id="reg-age" name="age" placeholder="Наприклад: 19" inputmode="numeric">
+          <span class="field-error" id="err-age" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-budget">Бюджет подорожі, грн (дійсне число)</label>
+          <input type="text" id="reg-budget" name="budget" placeholder="Наприклад: 4500.50" inputmode="decimal">
+          <span class="field-error" id="err-budget" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-birthdate">Дата реєстрації / народження (DD.MM.YYYY) <span class="required-mark">*</span></label>
+          <input type="text" id="reg-birthdate" name="birthDate" placeholder="Наприклад: 29.02.2024">
+          <span class="field-error" id="err-birthDate" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Пароль <span class="required-mark">*</span></label>
+          <input type="password" id="reg-password" name="password" placeholder="Введіть пароль" autocomplete="new-password">
+          <span class="field-error" id="err-password" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm-password">Підтвердження пароля <span class="required-mark">*</span></label>
+          <input type="password" id="reg-confirm-password" name="confirmPassword" placeholder="Повторіть пароль" autocomplete="new-password">
+          <span class="field-error" id="err-confirmPassword" role="alert"></span>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Зареєструватися та перевірити</button>
+          <button type="reset" class="btn btn-secondary" id="btn-reset-reg">Очистити форму</button>
+        </div>
+
+        <div id="reg-form-status" class="form-status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
