@@ -21,32 +21,27 @@ function classifyNumber(rawValue) {
   if (rawValue === null) {
     return 'Введення скасовано';
   }
-  const trimmed = typeof rawValue === 'string' ? rawValue.trim() : String(rawValue).trim();
-  if (rawValue === undefined || trimmed === '') {
+  const trimmed = String(rawValue ?? '').trim();
+  if (trimmed === '') {
     return 'Помилка: введіть коректне число';
   }
   const numericValue = Number(trimmed);
   if (!Number.isFinite(numericValue)) {
     return 'Помилка: введіть коректне число';
   }
-  if (numericValue > 0) {
-    return 'Число додатнє';
-  }
-  if (numericValue < 0) {
-    return 'Число від’ємне';
-  }
+  if (numericValue > 0) return 'Число додатнє';
+  if (numericValue < 0) return 'Число від’ємне';
   return 'Число дорівнює нулю';
 }
 
 function runTask1(
   promptFn = (msg) => globalThis.prompt(msg),
-  alertFn = (msg) => globalThis.alert(msg),
-  logFn = console.log
+  alertFn = (msg) => globalThis.alert(msg)
 ) {
   const value = promptFn('Завдання 1: Введіть число:');
-  logFn(`Завдання 1 — введене значення: ${value}`);
+  console.log(`Завдання 1 — введене значення: ${value}`);
   const message = classifyNumber(value);
-  logFn(`Завдання 1 — результат: ${message}`);
+  console.log(`Завдання 1 — результат: ${message}`);
   alertFn(message);
   return { value, message };
 }
@@ -87,12 +82,11 @@ function getSeason(number) {
 
 function runTask2(
   promptFn = (msg) => globalThis.prompt(msg),
-  logFn = console.log,
   alertFn = (msg) => globalThis.alert(msg)
 ) {
   const number = promptFn("Завдання 2: Введіть значення number ('1', '2', '3' або '4'):");
   const result = getSeason(number);
-  logFn(`Завдання 2 — number=${number} → result: ${result}`);
+  console.log(`Завдання 2 — number=${number} → result: ${result}`);
   if (typeof alertFn === 'function') {
     alertFn(`Пора року: ${result}`);
   }
@@ -113,53 +107,46 @@ function runTask2(
 "Cancelled"; в іншому випадку вивести в alert рядок "I don't know you".
 Теж саме виконати з User.
 */
-// Навчальні демонстраційні константи (без реальних секретів)
 const DEMO_USERS = Object.freeze({
   Admin: 'admin123',
   User: 'user123'
 });
 
 function authenticateUser(login, password) {
-  if (login === null || login === undefined) {
-    return { status: 'cancelled', message: 'Cancelled', askPassword: false };
-  }
-  const normalizedLogin = String(login).trim();
+  const normalizedLogin = login == null ? '' : String(login).trim();
   if (normalizedLogin === '') {
-    return { status: 'cancelled', message: 'Cancelled', askPassword: false };
+    return 'Cancelled';
   }
   if (!Object.hasOwn(DEMO_USERS, normalizedLogin)) {
-    return { status: 'unknown', message: "I don't know you", askPassword: false };
+    return "I don't know you";
   }
   if (password === undefined) {
-    return { status: 'need_password', user: normalizedLogin, askPassword: true };
+    return 'NEED_PASSWORD';
   }
   if (password === null || String(password).trim() === '') {
-    return { status: 'cancelled', message: 'Cancelled', askPassword: false };
+    return 'Cancelled';
   }
-  if (String(password) === DEMO_USERS[normalizedLogin]) {
-    return { status: 'authenticated', message: `Hello, ${normalizedLogin}`, askPassword: false };
-  }
-  return { status: 'wrong_password', message: 'Wrong password', askPassword: false };
+  return String(password) === DEMO_USERS[normalizedLogin]
+    ? `Hello, ${normalizedLogin}`
+    : 'Wrong password';
 }
 
 function runTask3(
   promptFn = (msg) => globalThis.prompt(msg),
-  alertFn = (msg) => globalThis.alert(msg),
-  logFn = console.log
+  alertFn = (msg) => globalThis.alert(msg)
 ) {
-  const rawLogin = promptFn('Завдання 3: Введіть логін (Admin або User):');
-  logFn(`Завдання 3 — введений логін: ${rawLogin}`);
-  const loginCheck = authenticateUser(rawLogin);
-  if (!loginCheck.askPassword) {
-    logFn(`Завдання 3 — результат: ${loginCheck.message}`);
-    alertFn(loginCheck.message);
-    return loginCheck;
+  const login = promptFn('Завдання 3: Введіть логін (Admin або User):');
+  console.log(`Завдання 3 — введений логін: ${login}`);
+
+  let message = authenticateUser(login);
+  if (message === 'NEED_PASSWORD') {
+    const password = promptFn(`Введіть пароль для ${String(login).trim()}:`);
+    message = authenticateUser(login, password);
   }
-  const password = promptFn(`Введіть пароль для ${loginCheck.user}:`);
-  const authResult = authenticateUser(rawLogin, password);
-  logFn(`Завдання 3 — результат для ${loginCheck.user}: ${authResult.message}`);
-  alertFn(authResult.message);
-  return authResult;
+
+  console.log(`Завдання 3 — результат: ${message}`);
+  alertFn(message);
+  return { login, message };
 }
 
 // ============================================================================
@@ -181,6 +168,13 @@ function makeTransaction(quantity, pricePerDroid) {
   return `You ordered ${quantity} droids worth ${totalPrice} credits!`;
 }
 
+function demoTask4() {
+  console.log('=== Завдання 4: makeTransaction ===');
+  console.log('makeTransaction(5, 3000) ->', makeTransaction(5, 3000));
+  console.log('makeTransaction(3, 1000) ->', makeTransaction(3, 1000));
+  console.log('makeTransaction(10, 500) ->', makeTransaction(10, 500));
+}
+
 // ============================================================================
 // ЗАВДАННЯ 5 (Непарні номери студентів за списком: 1, 3, 5…)
 // ============================================================================
@@ -194,8 +188,24 @@ function makeTransaction(quantity, pricePerDroid) {
 Якщо в рядку відсутні заборонені слова, функція повертає буль false.
 */
 function checkForSpam(message) {
-  const normalizedMessage = String(message).toLowerCase();
-  return normalizedMessage.includes('spam') || normalizedMessage.includes('sale');
+  const lower = String(message).toLowerCase();
+  return lower.includes('spam') || lower.includes('sale');
+}
+
+function demoTask5() {
+  console.log('=== Завдання 5: checkForSpam ===');
+  const samples = [
+    'Latest technology news',
+    'JavaScript weekly newsletter',
+    'Get best sale offers now!',
+    'Amazing SalE, only tonight!',
+    'Trust me, this is not a spam message',
+    'Get rid of sPaM emails. Our book in on sale!',
+    '[SPAM] How to earn fast money?'
+  ];
+  for (const text of samples) {
+    console.log(`"${text}" -> ${checkForSpam(text)}`);
+  }
 }
 
 // ============================================================================
@@ -223,27 +233,24 @@ function filterArray(numbers, value) {
   return filteredNumbers;
 }
 
-function runTasks4To6Demo(logFn = console.log) {
-  logFn('=== Завдання 4: makeTransaction ===');
-  logFn(makeTransaction(5, 3000));
-  logFn(makeTransaction(3, 1000));
-  logFn(makeTransaction(10, 500));
+function demoTask6() {
+  console.log('=== Завдання 6: filterArray ===');
+  const cases = [
+    [[1, 2, 3, 4, 5], 3],
+    [[1, 2, 3, 4, 5], 4],
+    [[1, 2, 3, 4, 5], 5],
+    [[12, 24, 8, 41, 76], 38],
+    [[12, 24, 8, 41, 76], 20]
+  ];
+  for (const [numbers, value] of cases) {
+    console.log(`filterArray(${JSON.stringify(numbers)}, ${value}) ->`, filterArray(numbers, value));
+  }
+}
 
-  logFn('=== Завдання 5: checkForSpam ===');
-  logFn(`"Latest technology news" -> ${checkForSpam('Latest technology news')}`);
-  logFn(`"JavaScript weekly newsletter" -> ${checkForSpam('JavaScript weekly newsletter')}`);
-  logFn(`"Get best sale offers now!" -> ${checkForSpam('Get best sale offers now!')}`);
-  logFn(`"Amazing SalE, only tonight!" -> ${checkForSpam('Amazing SalE, only tonight!')}`);
-  logFn(`"Trust me, this is not a spam message" -> ${checkForSpam('Trust me, this is not a spam message')}`);
-  logFn(`"Get rid of sPaM emails. Our book in on sale!" -> ${checkForSpam('Get rid of sPaM emails. Our book in on sale!')}`);
-  logFn(`"[SPAM] How to earn fast money?" -> ${checkForSpam('[SPAM] How to earn fast money?')}`);
-
-  logFn('=== Завдання 6: filterArray ===');
-  logFn(`filterArray([1, 2, 3, 4, 5], 3) -> ${JSON.stringify(filterArray([1, 2, 3, 4, 5], 3))}`);
-  logFn(`filterArray([1, 2, 3, 4, 5], 4) -> ${JSON.stringify(filterArray([1, 2, 3, 4, 5], 4))}`);
-  logFn(`filterArray([1, 2, 3, 4, 5], 5) -> ${JSON.stringify(filterArray([1, 2, 3, 4, 5], 5))}`);
-  logFn(`filterArray([12, 24, 8, 41, 76], 38) -> ${JSON.stringify(filterArray([12, 24, 8, 41, 76], 38))}`);
-  logFn(`filterArray([12, 24, 8, 41, 76], 20) -> ${JSON.stringify(filterArray([12, 24, 8, 41, 76], 20))}`);
+function runTasks4To6Demo() {
+  demoTask4();
+  demoTask5();
+  demoTask6();
 }
 
 // ============================================================================
@@ -281,9 +288,7 @@ function findMaxEvenIndex(arr) {
 }
 
 function findMinAtEvenIndex(arr) {
-  if (arr.length === 0) {
-    return -1;
-  }
+  if (arr.length === 0) return -1;
   let minIndex = 0;
   for (let i = 2; i < arr.length; i += 2) {
     if (arr[i] < arr[minIndex]) {
@@ -304,25 +309,22 @@ function swapMaxEvenAndMinAtEvenIndex(arr) {
       inputArray,
       outputArray,
       maxEvenIndex: -1,
-      maxEvenValue: null,
       minAtEvenIndex,
-      minAtEvenIndexValue: minAtEvenIndex !== -1 ? inputArray[minAtEvenIndex] : null,
       swapped: false,
       warning: 'У масиві відсутні парні елементи, обмін не виконано.'
     };
   }
 
-  const temp = outputArray[maxEvenIndex];
-  outputArray[maxEvenIndex] = outputArray[minAtEvenIndex];
-  outputArray[minAtEvenIndex] = temp;
+  [outputArray[maxEvenIndex], outputArray[minAtEvenIndex]] = [
+    outputArray[minAtEvenIndex],
+    outputArray[maxEvenIndex]
+  ];
 
   return {
     inputArray,
     outputArray,
     maxEvenIndex,
-    maxEvenValue: inputArray[maxEvenIndex],
     minAtEvenIndex,
-    minAtEvenIndexValue: inputArray[minAtEvenIndex],
     swapped: true,
     warning: null
   };
@@ -345,18 +347,17 @@ function insertionSort(arr) {
 function runTask7(
   promptFn = (msg, def) => globalThis.prompt(msg, def),
   alertFn = (msg) => globalThis.alert(msg),
-  logFn = console.log,
   rng = Math.random
 ) {
   const rawLength = promptFn('Завдання 7: Введіть кількість елементів масиву (ціле число >= 2):', '8');
   if (rawLength === null) {
-    logFn('Завдання 7 — введення скасовано користувачем.');
+    console.log('Завдання 7 — введення скасовано користувачем.');
     return null;
   }
   const trimmed = String(rawLength).trim();
   if (!/^\d+$/.test(trimmed) || Number(trimmed) < 2) {
     const errMsg = 'Помилка: введіть ціле число >= 2.';
-    logFn(`Завдання 7 — ${errMsg}`);
+    console.log(`Завдання 7 — ${errMsg}`);
     alertFn(errMsg);
     return null;
   }
@@ -366,18 +367,18 @@ function runTask7(
   const swapRes = swapMaxEvenAndMinAtEvenIndex(generated);
   const sortedArray = insertionSort(swapRes.outputArray);
 
-  logFn('=== Завдання 7 (Варіант 1) ===');
-  logFn(`Вхідний масив (n=${length}): ${JSON.stringify(swapRes.inputArray)}`);
+  console.log('=== Завдання 7 (Варіант 1) ===');
+  console.log(`Вхідний масив (n=${length}):`, swapRes.inputArray);
   if (swapRes.warning) {
-    logFn(`Попередження: ${swapRes.warning}`);
+    console.log(`Попередження: ${swapRes.warning}`);
   } else {
-    logFn(
-      `Макс. парний елемент: ${swapRes.maxEvenValue} (індекс ${swapRes.maxEvenIndex}); ` +
-        `Мін. на парному індексі: ${swapRes.minAtEvenIndexValue} (індекс ${swapRes.minAtEvenIndex})`
+    console.log(
+      `Макс. парний елемент: ${swapRes.inputArray[swapRes.maxEvenIndex]} (індекс ${swapRes.maxEvenIndex}); ` +
+        `Мін. на парному індексі: ${swapRes.inputArray[swapRes.minAtEvenIndex]} (індекс ${swapRes.minAtEvenIndex})`
     );
   }
-  logFn(`Вихідний масив після обміну: ${JSON.stringify(swapRes.outputArray)}`);
-  logFn(`Відсортований масив (Insertion Sort): ${JSON.stringify(sortedArray)}`);
+  console.log('Вихідний масив після обміну:', swapRes.outputArray);
+  console.log('Відсортований масив (Insertion Sort):', sortedArray);
 
   return { ...swapRes, sortedArray };
 }
@@ -401,18 +402,14 @@ function generateRandomMatrix(rows = 4, cols = 4, min = -50, max = 50, rng = Mat
     const row = [];
     for (let c = 0; c < cols; c += 1) {
       let val = Math.floor(rng() * (max - min + 1)) + min;
-      if (val === 0) {
-        val = max >= 1 ? 1 : -1;
-      }
-      if (val > 0) {
-        positiveCount += 1;
-      }
+      if (val === 0) val = max >= 1 ? 1 : -1;
+      if (val > 0) positiveCount += 1;
       row.push(val);
     }
     matrix.push(row);
   }
 
-  // Гарантуємо щонайменше 3 додатних елементи для можливості заміни 3-го елемента
+  // Гарантуємо щонайменше 3 додатних числа для заміни 3-го елемента
   for (let r = 0; r < rows && positiveCount < 3; r += 1) {
     for (let c = 0; c < cols && positiveCount < 3; c += 1) {
       if (matrix[r][c] < 0) {
@@ -425,19 +422,20 @@ function generateRandomMatrix(rows = 4, cols = 4, min = -50, max = 50, rng = Mat
   return matrix;
 }
 
-function splitMatrixAndReplaceThirdPositive(matrix, replacementValue) {
+function splitMatrixBySign(matrix) {
   const positive = [];
   const negative = [];
-
   for (const row of matrix) {
     for (const value of row) {
-      if (value > 0) {
-        positive.push(value);
-      } else if (value < 0) {
-        negative.push(value);
-      }
+      if (value > 0) positive.push(value);
+      else if (value < 0) negative.push(value);
     }
   }
+  return { positive, negative };
+}
+
+function splitMatrixAndReplaceThirdPositive(matrix, replacementValue) {
+  const { positive, negative } = splitMatrixBySign(matrix);
 
   if (positive.length < 3) {
     return {
@@ -477,30 +475,22 @@ function splitMatrixAndReplaceThirdPositive(matrix, replacementValue) {
 function runTask8(
   promptFn = (msg, def) => globalThis.prompt(msg, def),
   alertFn = (msg) => globalThis.alert(msg),
-  logFn = console.log,
   rng = Math.random
 ) {
   const matrix = generateRandomMatrix(4, 4, -50, 50, rng);
-  logFn('=== Завдання 8 (2D-масив 4×4) ===');
-  logFn(`Початковий двовимірний масив:\n${matrix.map((row) => `  [${row.join(', ')}]`).join('\n')}`);
+  const { positive, negative } = splitMatrixBySign(matrix);
 
-  const initialPositive = [];
-  const initialNegative = [];
-  for (const row of matrix) {
-    for (const val of row) {
-      if (val > 0) initialPositive.push(val);
-      else if (val < 0) initialNegative.push(val);
-    }
-  }
-  logFn(`Масив додатних чисел (до заміни): ${JSON.stringify(initialPositive)}`);
-  logFn(`Масив від’ємних чисел: ${JSON.stringify(initialNegative)}`);
+  console.log('=== Завдання 8 (2D-масив 4×4) ===');
+  console.log(`Початковий двовимірний масив:\n${matrix.map((row) => `  [${row.join(', ')}]`).join('\n')}`);
+  console.log('Масив додатних чисел (до заміни):', positive);
+  console.log('Масив від’ємних чисел:', negative);
 
   const rawReplacement = promptFn(
     'Завдання 8: Введіть від’ємне число (< 0) для заміни 3-го елемента додатного масиву:',
     '-25'
   );
   if (rawReplacement === null) {
-    logFn('Завдання 8 — заміну скасовано користувачем.');
+    console.log('Завдання 8 — заміну скасовано користувачем.');
     return null;
   }
 
@@ -509,14 +499,14 @@ function runTask8(
   const result = splitMatrixAndReplaceThirdPositive(matrix, numericValue);
 
   if (!result.ok) {
-    logFn(`Завдання 8 — помилка: ${result.error}`);
+    console.log(`Завдання 8 — помилка: ${result.error}`);
     alertFn(result.error);
     return result;
   }
 
-  logFn(`Замінено 3-й елемент (${result.replacedValue}) на ${result.replacementValue}`);
-  logFn(`Оновлений масив додатних чисел: ${JSON.stringify(result.updatedPositive)}`);
-  logFn(`Масив від’ємних чисел: ${JSON.stringify(result.negative)}`);
+  console.log(`Замінено 3-й елемент (${result.replacedValue}) на ${result.replacementValue}`);
+  console.log('Оновлений масив додатних чисел:', result.updatedPositive);
+  console.log('Масив від’ємних чисел:', result.negative);
   return result;
 }
 
@@ -540,17 +530,14 @@ function isRealNumberString(rawValue) {
 }
 
 function isValidDateDDMMYYYY(rawDate) {
-  const trimmed = String(rawDate ?? '').trim();
-  const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(trimmed);
-  if (!match) {
-    return false;
-  }
+  const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(String(rawDate ?? '').trim());
+  if (!match) return false;
+
   const day = Number(match[1]);
   const month = Number(match[2]);
   const year = Number(match[3]);
-  if (year < 1 || month < 1 || month > 12 || day < 1) {
-    return false;
-  }
+  if (year < 1 || month < 1 || month > 12 || day < 1) return false;
+
   const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   const daysInMonth = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   return day <= daysInMonth[month - 1];
@@ -605,42 +592,17 @@ function validateRegistrationForm(fields = {}) {
 // Ініціалізація DOM-інтерфейсу у браузері
 // ============================================================================
 function initLesson4Page() {
-  if (typeof document === 'undefined') {
-    return;
-  }
+  if (typeof document === 'undefined') return;
 
-  const consoleMirror = document.getElementById('console-mirror');
-  const writeLog = (message) => {
-    console.log(message);
-    if (consoleMirror) {
-      consoleMirror.textContent += `${message}\n`;
-      consoleMirror.scrollTop = consoleMirror.scrollHeight;
-    }
-  };
+  document.getElementById('btn-task-1')?.addEventListener('click', () => runTask1());
+  document.getElementById('btn-task-2')?.addEventListener('click', () => runTask2());
+  document.getElementById('btn-task-3')?.addEventListener('click', () => runTask3());
+  document.getElementById('btn-task-4-6')?.addEventListener('click', () => runTasks4To6Demo());
+  document.getElementById('btn-task-7')?.addEventListener('click', () => runTask7());
+  document.getElementById('btn-task-8')?.addEventListener('click', () => runTask8());
 
-  const bindClick = (id, handler) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('click', handler);
-    }
-  };
+  runTasks4To6Demo();
 
-  bindClick('btn-task-1', () => runTask1(globalThis.prompt, globalThis.alert, writeLog));
-  bindClick('btn-task-2', () => runTask2(globalThis.prompt, writeLog, globalThis.alert));
-  bindClick('btn-task-3', () => runTask3(globalThis.prompt, globalThis.alert, writeLog));
-  bindClick('btn-task-4-6', () => runTasks4To6Demo(writeLog));
-  bindClick('btn-task-7', () => runTask7(globalThis.prompt, globalThis.alert, writeLog));
-  bindClick('btn-task-8', () => runTask8(globalThis.prompt, globalThis.alert, writeLog));
-  bindClick('btn-clear-log', () => {
-    if (consoleMirror) {
-      consoleMirror.textContent = '';
-    }
-  });
-
-  // Автоматичний вивід прикладів для завдань 4–6 при завантаженні сторінки
-  runTasks4To6Demo(writeLog);
-
-  // Обробка форми реєстрації (Завдання 9, Варіант 1)
   const regForm = document.getElementById('registration-form');
   const statusBanner = document.getElementById('reg-form-status');
   const fieldIds = {
@@ -654,14 +616,9 @@ function initLesson4Page() {
 
   const clearValidationUI = () => {
     for (const [field, inputId] of Object.entries(fieldIds)) {
-      const inputEl = document.getElementById(inputId);
+      document.getElementById(inputId)?.classList.remove('input-invalid', 'input-valid');
       const errEl = document.getElementById(`err-${field}`);
-      if (inputEl) {
-        inputEl.classList.remove('input-invalid', 'input-valid');
-      }
-      if (errEl) {
-        errEl.textContent = '';
-      }
+      if (errEl) errEl.textContent = '';
     }
     if (statusBanner) {
       statusBanner.className = 'form-status';
@@ -676,8 +633,7 @@ function initLesson4Page() {
 
       const fields = {};
       for (const [field, inputId] of Object.entries(fieldIds)) {
-        const inputEl = document.getElementById(inputId);
-        fields[field] = inputEl ? inputEl.value : '';
+        fields[field] = document.getElementById(inputId)?.value ?? '';
       }
 
       const validation = validateRegistrationForm(fields);
@@ -687,7 +643,7 @@ function initLesson4Page() {
         const errEl = document.getElementById(`err-${field}`);
         const errorMsg = validation.errors[field];
         if (errorMsg) {
-          if (inputEl) inputEl.classList.add('input-invalid');
+          inputEl?.classList.add('input-invalid');
           if (errEl) errEl.textContent = errorMsg;
         } else if (inputEl && (fields[field].trim() !== '' || field !== 'budget')) {
           inputEl.classList.add('input-valid');
@@ -699,19 +655,17 @@ function initLesson4Page() {
           statusBanner.className = 'form-status is-visible is-success';
           statusBanner.textContent = `Успіх! Користувача "${fields.username.trim()}" успішно перевірено та зареєстровано.`;
         }
-        writeLog(`=== Завдання 9: Валідація успішна === Користувач: ${fields.username.trim()}, дата: ${fields.birthDate.trim()}`);
+        console.log(`=== Завдання 9: Валідація успішна === Користувач: ${fields.username.trim()}, дата: ${fields.birthDate.trim()}`);
       } else {
         if (statusBanner) {
           statusBanner.className = 'form-status is-visible is-error';
           statusBanner.textContent = 'Перевірку не пройдено. Виправте виділені помилки у формі.';
         }
-        writeLog(`=== Завдання 9: Помилки валідації === ${JSON.stringify(validation.errors)}`);
+        console.log('=== Завдання 9: Помилки валідації ===', validation.errors);
       }
     });
 
-    regForm.addEventListener('reset', () => {
-      setTimeout(clearValidationUI, 0);
-    });
+    regForm.addEventListener('reset', () => setTimeout(clearValidationUI, 0));
   }
 }
 
@@ -729,8 +683,11 @@ if (typeof module !== 'undefined' && module.exports) {
     authenticateUser,
     runTask3,
     makeTransaction,
+    demoTask4,
     checkForSpam,
+    demoTask5,
     filterArray,
+    demoTask6,
     runTasks4To6Demo,
     generateRandomArray,
     findMaxEvenIndex,
@@ -739,6 +696,7 @@ if (typeof module !== 'undefined' && module.exports) {
     insertionSort,
     runTask7,
     generateRandomMatrix,
+    splitMatrixBySign,
     splitMatrixAndReplaceThirdPositive,
     runTask8,
     isIntegerString,

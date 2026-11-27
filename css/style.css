@@ -16,8 +16,6 @@
     --brand-primary: #1e3a8a;
     --brand-accent: #0284c7;
     --brand-soft: #eff6ff;
-    --console-bg: #0f172a;
-    --console-ink: #e2e8f0;
 }
 
 body {
@@ -34,13 +32,21 @@ body {
     color: #ffffff;
     padding: 28px 24px;
     box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.25);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .container {
     max-width: 1120px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
 .header-badge {
@@ -64,6 +70,39 @@ body {
 .header-meta {
     font-size: 0.95rem;
     color: #dbeafe;
+}
+
+.header-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.console-hint {
+    background: var(--brand-soft);
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.92rem;
+    color: var(--brand-primary);
 }
 
 .grid-layout {
@@ -215,42 +254,6 @@ input[type="text"]:focus {
 .btn-pill:hover {
     background-color: #dbeafe;
     border-color: #93c5fd;
-}
-
-.console-card {
-    margin-top: 8px;
-}
-
-.console-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
-
-.console-mirror {
-    background-color: var(--console-bg);
-    color: var(--console-ink);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 0.85rem;
-    line-height: 1.55;
-    max-height: 440px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-.console-line-error {
-    color: #fca5a5;
-}
-
-.console-line-heading {
-    color: #7dd3fc;
-    font-weight: 700;
 }
 
 .tasks-list {

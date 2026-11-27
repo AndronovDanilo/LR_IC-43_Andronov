@@ -10,13 +10,24 @@
 <body>
   <header class="page-header">
     <div class="container">
-      <h1>Лабораторна робота №4: Функціональне застосування JavaScript у HTML-документі</h1>
-      <p class="page-subtitle">Шаблонні рядки, розгалуження, масиви, методи масивів, функції, сортування вставкою та валідація форми</p>
-      <span class="student-meta">Виконавець: Андронов Данило Юрійович · Група ІС-43 · №1 у списку (Варіант 1 / непарні номери)</span>
+      <div class="header-top">
+        <div>
+          <h1>Лабораторна робота №4: Функціональне застосування JavaScript у HTML-документі</h1>
+          <p class="page-subtitle">Шаблонні рядки, розгалуження, масиви, методи масивів, функції, сортування вставкою та валідація форми</p>
+          <span class="student-meta">Виконавець: Андронов Данило Юрійович · Група ІС-43 · №1 у списку (Варіант 1 / непарні номери)</span>
+        </div>
+        <nav class="header-nav" aria-label="Навігація лабораторними роботами">
+          <a class="nav-link" href="index.html">← Перейти до ЛР №5 (index.html)</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <main class="container">
+    <p class="console-hint">
+      Результати виконання завдань виводяться у стандартну консоль браузера (<strong>DevTools → Console</strong>, клавіша <code>F12</code>) та діалогові вікна <code>prompt()</code> / <code>alert()</code>.
+    </p>
+
     <section aria-label="Демонстрація завдань 1–8" class="grid-layout">
       <article class="task-card">
         <div>
@@ -66,14 +77,6 @@
         </div>
         <button type="button" class="btn btn-primary" id="btn-task-8">Запустити Завдання 8</button>
       </article>
-    </section>
-
-    <section class="output-panel" aria-label="Журнал виведення у Console">
-      <div class="output-panel-header">
-        <h2>Журнал результатів (дублюється у DevTools Console)</h2>
-        <button type="button" class="btn btn-secondary" id="btn-clear-log">Очистити журнал</button>
-      </div>
-      <pre class="console-mirror" id="console-mirror" aria-live="polite"></pre>
     </section>
 
     <section class="form-section" id="task-9-section">

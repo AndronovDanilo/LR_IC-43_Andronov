@@ -6,44 +6,10 @@
  *       Callback-функції. Стрілочні функції. Перебираючі методи масиву.
  * Виконавець: Андронов Данило Юрійович, група ІС-43 (№1 у списку, Варіант №1).
  *
- * Організація файлу: кожне з 19 завдань Варіанта №1 оформлено в окремій
- * ізольованій функції з текстом умови у коментарі, щоб однакові імена змінних
- * (student, product, user, students, products) не конфліктували між собою.
+ * Кожне з 19 завдань Варіанта №1 оформлено в окремій ізольованій функції
+ * з текстом умови у коментарі, щоб однакові імена змінних
+ * (student, product, user, students, products) не конфліктували.
  */
-
-// Допоміжна функція логування: виводить у стандартну консоль і (у браузері) у журнал на сторінці
-function logOutput(...args) {
-  console.log(...args);
-
-  if (typeof document === 'undefined') {
-    return;
-  }
-
-  const mirror = document.getElementById('console-mirror');
-  if (!mirror) {
-    return;
-  }
-
-  const formatted = args
-    .map((item) => {
-      if (typeof item === 'string') {
-        return item;
-      }
-      try {
-        return JSON.stringify(item, null, 2);
-      } catch {
-        return String(item);
-      }
-    })
-    .join(' ');
-
-  const line = document.createElement('div');
-  if (formatted.startsWith('===')) {
-    line.className = 'console-line-heading';
-  }
-  line.textContent = formatted;
-  mirror.appendChild(line);
-}
 
 // ============================================================================
 // ПІДТЕМА 1. «Об'єкт» (Варіант №1: завдання 1, 9)
@@ -55,22 +21,16 @@ function logOutput(...args) {
  * age, specialty, course. Заповніть властивості відповідними значеннями.
  * Виведіть об'єкт у консоль.
  */
-function task1_1(studentInput = {
-  firstName: 'Данило',
-  lastName: 'Андронов',
-  age: 19,
-  specialty: '126 Інформаційні системи та технології',
-  course: 2,
-}) {
-  const student = {
-    firstName: studentInput.firstName,
-    lastName: studentInput.lastName,
-    age: studentInput.age,
-    specialty: studentInput.specialty,
-    course: studentInput.course,
-  };
-
-  logOutput('[1.1] Об\'єкт student:', student);
+function task1_1(
+  student = {
+    firstName: 'Данило',
+    lastName: 'Андронов',
+    age: 19,
+    specialty: '126 Інформаційні системи та технології',
+    course: 2,
+  }
+) {
+  console.log('[1.1] Об\'єкт student:', student);
   return student;
 }
 
@@ -81,33 +41,20 @@ function task1_1(studentInput = {
  * місто, вулицю, номер будинку та поштовий індекс. Виведіть у консоль місто
  * та вулицю проживання користувача.
  */
-function task1_9(userInput = {
-  firstName: 'Данило',
-  lastName: 'Андронов',
-  age: 19,
-  address: {
-    city: 'Київ',
-    street: 'Політехнічна',
-    house: '14В',
-    postalCode: '03056',
-  },
-}) {
-  const user = {
-    firstName: userInput.firstName,
-    lastName: userInput.lastName,
-    age: userInput.age,
+function task1_9(
+  user = {
+    firstName: 'Данило',
+    lastName: 'Андронов',
+    age: 19,
     address: {
-      city: userInput.address.city,
-      street: userInput.address.street,
-      house: userInput.address.house,
-      postalCode: userInput.address.postalCode,
+      city: 'Київ',
+      street: 'Політехнічна',
+      house: '14В',
+      postalCode: '03056',
     },
-  };
-
-  logOutput(
-    `[1.9] Місто проживання: ${user.address.city}, вулиця: ${user.address.street}`
-  );
-
+  }
+) {
+  console.log(`[1.9] Місто проживання: ${user.address.city}, вулиця: ${user.address.street}`);
   return {
     user,
     city: user.address.city,
@@ -125,23 +72,17 @@ function task1_9(userInput = {
  * Використовуючи метод Object.keys(), отримайте масив назв усіх властивостей
  * об'єкта. Виведіть отриманий масив у консоль.
  */
-function task2_1(studentInput = {
-  name: 'Данило Андронов',
-  age: 19,
-  specialty: 'Інформаційні системи та технології',
-  course: 2,
-  group: 'ІС-43',
-}) {
-  const student = {
-    name: studentInput.name,
-    age: studentInput.age,
-    specialty: studentInput.specialty,
-    course: studentInput.course,
-    group: studentInput.group,
-  };
-
+function task2_1(
+  student = {
+    name: 'Данило Андронов',
+    age: 19,
+    specialty: 'Інформаційні системи та технології',
+    course: 2,
+    group: 'ІС-43',
+  }
+) {
   const keys = Object.keys(student);
-  logOutput('[2.1] Ключі об\'єкта student:', keys);
+  console.log('[2.1] Ключі об\'єкта student:', keys);
   return keys;
 }
 
@@ -152,27 +93,22 @@ function task2_1(studentInput = {
  * властивості price у копії. Перевірте, чи змінився початковий об'єкт.
  */
 function task2_8(
-  productInput = {
+  product = {
     name: 'Готельний тур «Карпатський вікенд»',
     price: 4500,
     category: 'Туризм та готелі',
   },
   newCopyPrice = 3990
 ) {
-  const product = {
-    name: productInput.name,
-    price: productInput.price,
-    category: productInput.category,
-  };
-
+  const originalPrice = product.price;
   const productCopy = Object.assign({}, product);
   productCopy.price = newCopyPrice;
 
-  const isOriginalChanged = product.price !== productInput.price;
-  logOutput('[2.8] Початковий об\'єкт product:', product);
-  logOutput('[2.8] Поверхнева копія productCopy:', productCopy);
-  logOutput(
-    `[2.8] Чи змінився початковий об'єкт? ${isOriginalChanged ? 'Так' : 'Ні (price залишилась ' + product.price + ')'}`
+  const isOriginalChanged = product.price !== originalPrice;
+  console.log('[2.8] Початковий об\'єкт product:', product);
+  console.log('[2.8] Поверхнева копія productCopy:', productCopy);
+  console.log(
+    `[2.8] Чи змінився початковий об'єкт? ${isOriginalChanged ? 'Так' : `Ні (price залишилась ${product.price})`}`
   );
 
   return {
@@ -191,19 +127,14 @@ function task2_8(
  * Створіть масив students, який містить три об'єкти студентів. Кожен об'єкт
  * повинен мати властивості id, name, age, group. Виведіть увесь масив у консоль.
  */
-function task3_1(studentsInput = [
-  { id: 1, name: 'Данило Андронов', age: 19, group: 'ІС-43' },
-  { id: 2, name: 'Олена Коваленко', age: 18, group: 'ІС-43' },
-  { id: 3, name: 'Максим Шевченко', age: 19, group: 'ІС-43' },
-]) {
-  const students = studentsInput.map((item) => ({
-    id: item.id,
-    name: item.name,
-    age: item.age,
-    group: item.group,
-  }));
-
-  logOutput('[3.1] Масив студентів:', students);
+function task3_1(
+  students = [
+    { id: 1, name: 'Данило Андронов', age: 19, group: 'ІС-43' },
+    { id: 2, name: 'Олена Коваленко', age: 18, group: 'ІС-43' },
+    { id: 3, name: 'Максим Шевченко', age: 19, group: 'ІС-43' },
+  ]
+) {
+  console.log('[3.1] Масив студентів:', students);
   return students;
 }
 
@@ -221,11 +152,7 @@ function task3_7(
   ],
   targetId = 102
 ) {
-  const products = productsInput.map((item) => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-  }));
+  const products = productsInput.slice();
 
   let indexToDelete = -1;
   for (let i = 0; i < products.length; i += 1) {
@@ -237,17 +164,13 @@ function task3_7(
 
   let removedItem = null;
   if (indexToDelete !== -1) {
-    const removed = products.splice(indexToDelete, 1);
-    removedItem = removed[0];
-    logOutput(
-      `[3.7] Видалено товар з id=${targetId} (індекс ${indexToDelete}):`,
-      removedItem
-    );
+    [removedItem] = products.splice(indexToDelete, 1);
+    console.log(`[3.7] Видалено товар з id=${targetId} (індекс ${indexToDelete}):`, removedItem);
   } else {
-    logOutput(`[3.7] Товар з id=${targetId} не знайдено, масив без змін.`);
+    console.log(`[3.7] Товар з id=${targetId} не знайдено, масив без змін.`);
   }
 
-  logOutput('[3.7] Оновлений масив товарів:', products);
+  console.log('[3.7] Оновлений масив товарів:', products);
   return {
     products,
     removedIndex: indexToDelete,
@@ -265,24 +188,16 @@ function task3_7(
  * Використовуючи деструктуризацію, створіть окремі змінні для отримання
  * значень цих властивостей. Виведіть змінні в консоль.
  */
-function task4_1(studentInput = {
-  name: 'Данило Андронов',
-  age: 19,
-  group: 'ІС-43',
-  course: 2,
-}) {
-  const student = {
-    name: studentInput.name,
-    age: studentInput.age,
-    group: studentInput.group,
-    course: studentInput.course,
-  };
-
+function task4_1(
+  student = {
+    name: 'Данило Андронов',
+    age: 19,
+    group: 'ІС-43',
+    course: 2,
+  }
+) {
   const { name, age, group, course } = student;
-  logOutput(
-    `[4.1] Деструктуризація: ім'я=${name}, вік=${age}, група=${group}, курс=${course}`
-  );
-
+  console.log(`[4.1] Деструктуризація: ім'я=${name}, вік=${age}, група=${group}, курс=${course}`);
   return { name, age, group, course };
 }
 
@@ -293,32 +208,20 @@ function task4_1(studentInput = {
  * rest (...) використайте для збереження решти властивостей в окремий об'єкт.
  * Виведіть усі результати.
  */
-function task4_5(studentInput = {
-  name: 'Данило Андронов',
-  age: 19,
-  group: 'ІС-43',
-  email: 'andronov.danylo@kpi.ua',
-  phone: '+380671234567',
-  course: 2,
-}) {
-  const student = {
-    name: studentInput.name,
-    age: studentInput.age,
-    group: studentInput.group,
-    email: studentInput.email,
-    phone: studentInput.phone,
-    course: studentInput.course,
-  };
-
-  const { name, group, ...restProperties } = student;
-  logOutput(`[4.5] Ім'я: ${name}, Група: ${group}`);
-  logOutput('[4.5] Решта властивостей (...rest):', restProperties);
-
-  return {
-    name,
-    group,
-    rest: restProperties,
-  };
+function task4_5(
+  student = {
+    name: 'Данило Андронов',
+    age: 19,
+    group: 'ІС-43',
+    email: 'andronov.danylo@kpi.ua',
+    phone: '+380671234567',
+    course: 2,
+  }
+) {
+  const { name, group, ...rest } = student;
+  console.log(`[4.5] Ім'я: ${name}, Група: ${group}`);
+  console.log('[4.5] Решта властивостей (...rest):', rest);
+  return { name, group, rest };
 }
 
 /*
@@ -329,20 +232,20 @@ function task4_5(studentInput = {
  * перейменування властивостей, отримайте ім'я, електронну пошту, місто та
  * статус відповіді.
  */
-function task4_10(responseInput = {
-  status: 200,
-  data: {
-    user: {
-      name: 'Данило Андронов',
-      email: 'danylo.andronov@mandrystay.ua',
-      address: {
-        city: 'Київ',
+function task4_10(
+  response = {
+    status: 200,
+    data: {
+      user: {
+        name: 'Данило Андронов',
+        email: 'danylo.andronov@mandrystay.ua',
+        address: {
+          city: 'Київ',
+        },
       },
     },
-  },
-}) {
-  const response = responseInput;
-
+  }
+) {
   const {
     status: responseStatus,
     data: {
@@ -354,7 +257,7 @@ function task4_10(responseInput = {
     },
   } = response;
 
-  logOutput(
+  console.log(
     `[4.10] Відповідь сервера -> статус: ${responseStatus}, користувач: ${userName}, email: ${userEmail}, місто: ${userCity}`
   );
 
@@ -390,7 +293,7 @@ function multiplyByTwo(num) {
 
 function task5_1(value = 7, callback = multiplyByTwo) {
   const result = processValue(value, callback);
-  logOutput(`[5.1] processValue(${value}, ${callback.name || 'callback'}) = ${result}`);
+  console.log(`[5.1] processValue(${value}, ${callback.name || 'callback'}) = ${result}`);
   return result;
 }
 
@@ -401,14 +304,13 @@ function task5_1(value = 7, callback = multiplyByTwo) {
  * через 3 секунди. Передайте функцію, яка виводить повідомлення в консоль.
  */
 function logDelayedMessage(message) {
-  logOutput(`[5.7] Відкладене повідомлення (через 3 секунди): "${message}"`);
+  console.log(`[5.7] Відкладене повідомлення (через 3 секунди): "${message}"`);
 }
 
 function showMessage(message, callback, delayMs = 3000) {
   if (typeof callback !== 'function') {
     throw new TypeError('callback у showMessage() має бути функцією');
   }
-
   return setTimeout(() => {
     callback(message);
   }, delayMs);
@@ -419,7 +321,7 @@ function task5_7(
   callback = logDelayedMessage,
   delayMs = 3000
 ) {
-  logOutput(`[5.7] Заплановано відкладене повідомлення (затримка ${delayMs} мс)...`);
+  console.log(`[5.7] Заплановано відкладене повідомлення (затримка ${delayMs} мс)...`);
   return showMessage(message, callback, delayMs);
 }
 
@@ -444,9 +346,8 @@ function task6_1(name = 'Данило') {
   const arrowResult = greetingArrow(name);
   const areEqual = regularResult === arrowResult;
 
-  logOutput(`[6.1] Звичайна функція greeting("${name}"): "${regularResult}"`);
-  logOutput(`[6.1] Стрілочна функція greetingArrow("${name}"): "${arrowResult}"`);
-  logOutput(`[6.1] Результати однакові: ${areEqual}`);
+  console.log(`[6.1] greeting("${name}"): "${regularResult}"`);
+  console.log(`[6.1] greetingArrow("${name}"): "${arrowResult}" (однакові: ${areEqual})`);
 
   return {
     regularResult,
@@ -472,21 +373,21 @@ function task6_10(brand = 'Toyota') {
     getInfo() {
       return this.brand;
     },
-    // Демонстрація: стрілочна функція бере лексичний this із зовнішньої області, а не об'єкт car
-    getInfoArrow: () => (typeof this !== 'undefined' && this ? this.brand : undefined),
+    // Стрілочна функція лексично успадковує this зовнішньої області (undefined у strict mode)
+    getInfoArrow: () => this?.brand,
   };
 
   const methodBrand = car.getInfo();
   const arrowThisBrand = car.getInfoArrow();
   const arrowMessage = showBrand(car.brand);
   const explanation =
-    'Стрілочна функція не створює власного контексту this, а лексично успадковує this зовнішньої області видимості; ' +
+    'Стрілочна функція не має власного this і бере його з зовнішньої області видимості; ' +
     'тому для методів об\'єкта використовують звичайні методи, а стрілочній функції дані передають через параметр.';
 
-  logOutput(`[6.10] car.getInfo() (this.brand): "${methodBrand}"`);
-  logOutput(`[6.10] car.getInfoArrow() (лексичний this.brand): ${String(arrowThisBrand)}`);
-  logOutput(`[6.10] showBrand(car.brand): "${arrowMessage}"`);
-  logOutput(`[6.10] Пояснення: ${explanation}`);
+  console.log(`[6.10] car.getInfo() (this.brand): "${methodBrand}"`);
+  console.log(`[6.10] car.getInfoArrow() (лексичний this.brand): ${String(arrowThisBrand)}`);
+  console.log(`[6.10] showBrand(car.brand): "${arrowMessage}"`);
+  console.log(`[6.10] Пояснення: ${explanation}`);
 
   return {
     car,
@@ -516,7 +417,7 @@ function processNumber(num, callback) {
 
 function task7_1(num = 8) {
   const result = processNumber(num, (n) => n * 5);
-  logOutput(`[7.1] processNumber(${num}, (n) => n * 5) = ${result}`);
+  console.log(`[7.1] processNumber(${num}, (n) => n * 5) = ${result}`);
   return result;
 }
 
@@ -528,9 +429,7 @@ function task7_1(num = 8) {
  * поточне значення поля введення.
  */
 function initTask7_6(doc = typeof document !== 'undefined' ? document : null) {
-  if (!doc) {
-    return null;
-  }
+  if (!doc) return null;
 
   const inputEl = doc.getElementById('task-7-6-input');
   const outputEl = doc.getElementById('task-7-6-output');
@@ -539,9 +438,7 @@ function initTask7_6(doc = typeof document !== 'undefined' ? document : null) {
   const statusEl = doc.getElementById('task-7-6-status');
   const formEl = doc.getElementById('task-7-6-form');
 
-  if (!inputEl) {
-    return null;
-  }
+  if (!inputEl) return null;
 
   const renderValue = (value) => {
     if (outputEl) {
@@ -549,18 +446,15 @@ function initTask7_6(doc = typeof document !== 'undefined' ? document : null) {
     }
   };
 
-  // Перешкоджаємо перезавантаженню сторінки при натисканні Enter у формі
   if (formEl) {
-    formEl.addEventListener('submit', (event) => {
-      event.preventDefault();
-    });
+    formEl.addEventListener('submit', (event) => event.preventDefault());
   }
 
   // Стрілочний callback на подію input
   inputEl.addEventListener('input', (event) => {
     const currentValue = event.target.value;
     renderValue(currentValue);
-    logOutput(`[7.6] Подія input -> поточне значення: "${currentValue}"`);
+    console.log(`[7.6] Подія input -> поточне значення: "${currentValue}"`);
   });
 
   if (buttonEl) {
@@ -571,10 +465,8 @@ function initTask7_6(doc = typeof document !== 'undefined' ? document : null) {
         currentValue.trim().length > 0
           ? `Підтверджено значення: "${currentValue}"`
           : 'Поле введення наразі порожнє.';
-      if (statusEl) {
-        statusEl.textContent = statusText;
-      }
-      logOutput(`[7.6] Натиснуто кнопку -> ${statusText}`);
+      if (statusEl) statusEl.textContent = statusText;
+      console.log(`[7.6] Натиснуто кнопку -> ${statusText}`);
     });
   }
 
@@ -582,20 +474,12 @@ function initTask7_6(doc = typeof document !== 'undefined' ? document : null) {
     clearBtnEl.addEventListener('click', () => {
       inputEl.value = '';
       renderValue('');
-      if (statusEl) {
-        statusEl.textContent = 'Поле очищено.';
-      }
-      logOutput('[7.6] Поле введення очищено.');
+      if (statusEl) statusEl.textContent = 'Поле очищено.';
+      console.log('[7.6] Поле введення очищено.');
     });
   }
 
-  return {
-    inputEl,
-    outputEl,
-    buttonEl,
-    clearBtnEl,
-    statusEl,
-  };
+  return { inputEl, outputEl, buttonEl, clearBtnEl, statusEl };
 }
 
 /*
@@ -617,11 +501,11 @@ function loadData(shouldFail = false) {
 function task7_9(shouldFail = false) {
   return loadData(shouldFail)
     .then((message) => {
-      logOutput(`[7.9] Promise .then(): "${message}"`);
+      console.log(`[7.9] Promise .then(): "${message}"`);
       return { ok: true, message };
     })
     .catch((error) => {
-      logOutput(`[7.9] Promise .catch(): "${error.message}"`);
+      console.log(`[7.9] Promise .catch(): "${error.message}"`);
       return { ok: false, error: error.message };
     });
 }
@@ -636,20 +520,19 @@ function task7_9(shouldFail = false) {
  * group. Використовуючи метод forEach() та стрілочну функцію, виведіть
  * інформацію про кожного студента в консоль.
  */
-function task8_1(studentsInput = [
-  { name: 'Данило Андронов', age: 19, group: 'ІС-43' },
-  { name: 'Олена Коваленко', age: 18, group: 'ІС-43' },
-  { name: 'Максим Шевченко', age: 19, group: 'ІС-43' },
-]) {
-  const students = studentsInput;
+function task8_1(
+  students = [
+    { name: 'Данило Андронов', age: 19, group: 'ІС-43' },
+    { name: 'Олена Коваленко', age: 18, group: 'ІС-43' },
+    { name: 'Максим Шевченко', age: 19, group: 'ІС-43' },
+  ]
+) {
   const formattedLines = [];
-
   students.forEach((student, index) => {
     const info = `[8.1] Студент №${index + 1}: ${student.name}, вік: ${student.age}, група: ${student.group}`;
     formattedLines.push(info);
-    logOutput(info);
+    console.log(info);
   });
-
   return formattedLines;
 }
 
@@ -661,22 +544,20 @@ function task8_1(studentsInput = [
  * повідомлення.
  */
 function task8_5(
-  productsInput = [
+  products = [
     { id: 201, name: 'Тур у Яремче (2 ночі)', price: 4200 },
     { id: 202, name: 'Готель Буковель SPA', price: 6800 },
     { id: 203, name: 'Вікенд у Львові', price: 3100 },
   ],
   targetId = 202
 ) {
-  const products = productsInput;
   const foundIndex = products.findIndex((item) => item.id === targetId);
-
   const message =
     foundIndex !== -1
       ? `[8.5] Товар з id=${targetId} знайдено за індексом ${foundIndex} (${products[foundIndex].name})`
       : `[8.5] Товар з id=${targetId} не знайдено (індекс -1)`;
 
-  logOutput(message);
+  console.log(message);
   return {
     index: foundIndex,
     found: foundIndex !== -1,
@@ -690,67 +571,67 @@ function task8_5(
  * price, quantity. Використовуючи метод reduce(), обчисліть загальну вартість
  * усіх товарів на складі. Результат виведіть у консоль.
  */
-function task8_8(productsInput = [
-  { name: 'Клавіатура механічна', price: 2500, quantity: 4 },
-  { name: 'Миша бездротова', price: 1400, quantity: 6 },
-  { name: 'Монітор 27"', price: 9800, quantity: 2 },
-]) {
-  const products = productsInput;
+function task8_8(
+  products = [
+    { name: 'Клавіатура механічна', price: 2500, quantity: 4 },
+    { name: 'Миша бездротова', price: 1400, quantity: 6 },
+    { name: 'Монітор 27"', price: 9800, quantity: 2 },
+  ]
+) {
   const totalCost = products.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  logOutput(`[8.8] Загальна вартість товарів на складі: ${totalCost} грн`);
+  console.log(`[8.8] Загальна вартість товарів на складі: ${totalCost} грн`);
   return totalCost;
 }
 
 function runSubtopic(subtopicNumber) {
   const runners = {
     1: () => {
-      logOutput('=== Підтема 1. Об\'єкт (1, 9) ===');
+      console.log('=== Підтема 1. Об\'єкт (1, 9) ===');
       task1_1();
       task1_9();
     },
     2: () => {
-      logOutput('=== Підтема 2. Методи об\'єкта (1, 8) ===');
+      console.log('=== Підтема 2. Методи об\'єкта (1, 8) ===');
       task2_1();
       task2_8();
     },
     3: () => {
-      logOutput('=== Підтема 3. Масив об\'єктів (1, 7) ===');
+      console.log('=== Підтема 3. Масив об\'єктів (1, 7) ===');
       task3_1();
       task3_7();
       task3_7(undefined, 999);
     },
     4: () => {
-      logOutput('=== Підтема 4. Деструктуризація об\'єктів (1, 5, 10) ===');
+      console.log('=== Підтема 4. Деструктуризація об\'єктів (1, 5, 10) ===');
       task4_1();
       task4_5();
       task4_10();
     },
     5: () => {
-      logOutput('=== Підтема 5. Callback-функції (1, 7) ===');
+      console.log('=== Підтема 5. Callback-функції (1, 7) ===');
       task5_1(7);
       task5_1(12.5);
       task5_7();
     },
     6: () => {
-      logOutput('=== Підтема 6. Стрілочні функції (1, 10) ===');
+      console.log('=== Підтема 6. Стрілочні функції (1, 10) ===');
       task6_1('Данило');
       task6_1('Олена');
       task6_10('Toyota');
       task6_10('Volkswagen');
     },
     7: () => {
-      logOutput('=== Підтема 7. Стрілочні функції як колбеки (1, 6, 9) ===');
+      console.log('=== Підтема 7. Стрілочні функції як колбеки (1, 6, 9) ===');
       task7_1(8);
       task7_1(-3);
-      logOutput('[7.6] Подія input підключена до #task-7-6-input (у браузері).');
-      task7_9(false);
+      console.log('[7.6] Подія input підключена до #task-7-6-input (у браузері).');
+      return Promise.all([task7_9(false), task7_9(true)]);
     },
     8: () => {
-      logOutput('=== Підтема 8. Перебираючі методи масиву (1, 5, 8) ===');
+      console.log('=== Підтема 8. Перебираючі методи масиву (1, 5, 8) ===');
       task8_1();
       task8_5(undefined, 202);
       task8_5(undefined, 999);
@@ -763,44 +644,31 @@ function runSubtopic(subtopicNumber) {
   };
 
   const runner = runners[Number(subtopicNumber)];
-  if (runner) {
-    runner();
-  }
+  return runner ? runner() : undefined;
 }
 
 function runAllDemos() {
-  logOutput('=== Старт демонстрації ЛР №5 (Варіант №1, ІС-43, Андронов Данило) ===');
+  console.log('=== Старт демонстрації ЛР №5 (Варіант №1, ІС-43, Андронов Данило) ===');
+  const pending = [];
   for (let i = 1; i <= 8; i += 1) {
-    runSubtopic(i);
+    const res = runSubtopic(i);
+    if (res && typeof res.then === 'function') {
+      pending.push(res);
+    }
   }
+  return Promise.all(pending);
 }
 
 function initBrowserUi() {
-  if (typeof document === 'undefined') {
-    return;
-  }
+  if (typeof document === 'undefined') return;
 
   initTask7_6(document);
 
-  const runAllBtn = document.getElementById('run-all-demos-btn');
-  if (runAllBtn) {
-    runAllBtn.addEventListener('click', () => {
-      runAllDemos();
-    });
-  }
+  document.getElementById('run-all-demos-btn')?.addEventListener('click', () => {
+    runAllDemos();
+  });
 
-  const clearMirrorBtn = document.getElementById('clear-mirror-btn');
-  if (clearMirrorBtn) {
-    clearMirrorBtn.addEventListener('click', () => {
-      const mirror = document.getElementById('console-mirror');
-      if (mirror) {
-        mirror.textContent = '';
-      }
-    });
-  }
-
-  const subtopicButtons = document.querySelectorAll('[data-subtopic]');
-  subtopicButtons.forEach((btn) => {
+  document.querySelectorAll('[data-subtopic]').forEach((btn) => {
     btn.addEventListener('click', () => {
       runSubtopic(btn.dataset.subtopic);
     });
@@ -822,7 +690,6 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    logOutput,
     task1_1,
     task1_9,
     task2_1,
